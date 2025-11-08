@@ -32,7 +32,7 @@ int main() {
     }
 
     // Create a snake
-    Snake* snake = create_snake(100, 100, INITIAL_SNAKE_LENGTH);
+    Snake* snake = create_snake(100, 100, INITIAL_SNAKE_LENGTH, RIGHT);
 
 
     // Event loop
@@ -45,6 +45,27 @@ int main() {
             if (e.type == SDL_QUIT) {
                 quit = 1;
             }
+
+            // handle keyboard input
+            if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_UP:
+                        set_snake_direction(snake, UP);
+                        break;
+                    case SDLK_DOWN:
+                        set_snake_direction(snake, DOWN);
+                         break;
+                    case SDLK_LEFT:
+                        set_snake_direction(snake, LEFT);
+                        break;
+                    case SDLK_RIGHT:
+                        set_snake_direction(snake, RIGHT);
+                        break;
+                    case SDLK_ESCAPE:
+                        quit = 1;
+                        break;
+                }
+            }
         }
 
         // Clear screen with black background
@@ -53,7 +74,7 @@ int main() {
 
         // Draw Snake
         draw_snake(snake, renderer);
-        advance_snake(snake, SEGMENT_SIZE, 0);
+        advance_snake(snake);
 
         // Present the renderer
         SDL_RenderPresent(renderer);

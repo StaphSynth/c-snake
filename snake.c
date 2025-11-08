@@ -1,31 +1,37 @@
 #include <stdlib.h>
 #include "snake.h"
 
-Snake* create_snake(int start_x, int start_y, int initial_length) {
-    Snake* snake = (Snake*)malloc(sizeof(Snake));
-    snake->head = NULL;
-    snake->tail = NULL;
-    snake->length = 0;
+Snake *create_snake(int start_x, int start_y, int initial_length, Direction initial_direction)
+{
+  Snake *snake = (Snake *)malloc(sizeof(Snake));
+  snake->head = NULL;
+  snake->tail = NULL;
+  snake->length = 0;
+  snake->dir = initial_direction;
 
-    for (int i = 0; i < initial_length; i++) {
-        Segment* segment = (Segment*)malloc(sizeof(Segment));
-        segment->size = SEGMENT_SIZE;
-        segment->x = start_x - (i * SEGMENT_SIZE);
-        segment->y = start_y;
-        segment->next = NULL;
+  for (int i = 0; i < initial_length; i++)
+  {
+    Segment *segment = (Segment *)malloc(sizeof(Segment));
+    segment->size = SEGMENT_SIZE;
+    segment->x = start_x - (i * SEGMENT_SIZE);
+    segment->y = start_y;
+    segment->next = NULL;
 
-        if (snake->head == NULL) {
-            snake->head = segment;
-            snake->tail = segment;
-        } else {
-            snake->tail->next = segment;
-            snake->tail = segment;
-        }
-
-        snake->length++;
+    if (snake->head == NULL)
+    {
+      snake->head = segment;
+      snake->tail = segment;
+    }
+    else
+    {
+      snake->tail->next = segment;
+      snake->tail = segment;
     }
 
-    return snake;
+    snake->length++;
+  }
+
+  return snake;
 }
 
 void draw_snake(Snake* snake, SDL_Renderer* renderer) {
@@ -68,7 +74,17 @@ void free_snake(Snake* snake) {
     free(snake);
 }
 
-void advance_snake(Snake* snake, int dx, int dy) {
+void advance_snake(Snake* snake) {
+    int dx = 0;
+    int dy = 0;
+
+    switch (snake->dir) {
+        case UP: dy = -SEGMENT_SIZE; break;
+        case DOWN: dy = SEGMENT_SIZE; break;
+        case LEFT: dx = -SEGMENT_SIZE; break;
+        case RIGHT: dx = SEGMENT_SIZE; break;
+    }
+
     // Create new head segment
     Segment* new_head = (Segment*)malloc(sizeof(Segment));
     new_head->size = SEGMENT_SIZE;
@@ -89,4 +105,23 @@ void advance_snake(Snake* snake, int dx, int dy) {
     current->next = NULL;
     snake->tail = current;
     snake->length--;
+}
+
+void set_snake_direction(Snake* snake, Direction dir) {
+    switch(snake->dir) {
+        case UP:
+            if (dir == DOWN) return;
+            break;
+        case DOWN:
+            if (dir == UP) return;
+            break;
+        case LEFT:
+            if (dir == RIGHT) return;
+            break;
+        case RIGHT:
+            if (dir == LEFT) return;
+            break;
+    }
+
+    snake->dir = dir;
 }
