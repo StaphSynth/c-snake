@@ -1,5 +1,5 @@
 #include <stdio.h>
-// #include <SDL2/SDL.h>
+#include <SDL2/SDL.h>
 #include "snake.h"
 
 int main() {
@@ -32,7 +32,7 @@ int main() {
     }
 
     // Create a snake
-    Snake* snake = create_snake(100, 100, INITIAL_SNAKE_LENGTH, RIGHT);
+    Snake* snake = create_snake(100, 100, INITIAL_SNAKE_LENGTH);
 
 
     // Event loop

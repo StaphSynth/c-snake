@@ -1,13 +1,13 @@
 #include <stdlib.h>
 #include "snake.h"
 
-Snake *create_snake(int start_x, int start_y, int initial_length, Direction initial_direction)
+Snake *create_snake(int start_x, int start_y, int initial_length)
 {
   Snake *snake = (Snake *)malloc(sizeof(Snake));
   snake->head = NULL;
   snake->tail = NULL;
   snake->length = 0;
-  snake->dir = initial_direction;
+  snake->dir = RIGHT;
 
   for (int i = 0; i < initial_length; i++)
   {
@@ -17,13 +17,10 @@ Snake *create_snake(int start_x, int start_y, int initial_length, Direction init
     segment->y = start_y;
     segment->next = NULL;
 
-    if (snake->head == NULL)
-    {
+    if (snake->head == NULL) {
       snake->head = segment;
       snake->tail = segment;
-    }
-    else
-    {
+    } else {
       snake->tail->next = segment;
       snake->tail = segment;
     }
@@ -101,6 +98,7 @@ void advance_snake(Snake* snake) {
     while (current->next != snake->tail) {
         current = current->next;
     }
+
     free(snake->tail);
     current->next = NULL;
     snake->tail = current;
