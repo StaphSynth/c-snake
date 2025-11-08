@@ -12,7 +12,7 @@ BIN_DIR = bin
 TARGET = $(BIN_DIR)/snake
 
 # Source files
-SOURCES = main.c
+SOURCES = main.c snake.c
 
 # Object files (automatically generated from sources, placed in bin directory)
 OBJECTS = $(SOURCES:%.c=$(BIN_DIR)/%.o)

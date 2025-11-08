@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <SDL2/SDL.h>
+// #include <SDL2/SDL.h>
+#include "snake.h"
 
 int main() {
     // Initialize SDL
@@ -30,8 +31,9 @@ int main() {
         return 1;
     }
 
-    // Define a square
-    SDL_Rect square = {250, 200, 100, 100}; // x, y, width, height
+    // Create a snake
+    Snake* snake = create_snake(100, 100, INITIAL_SNAKE_LENGTH);
+
 
     // Event loop
     SDL_Event e;
@@ -45,23 +47,24 @@ int main() {
             }
         }
 
-        // Clear screen with white background
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        // Clear screen with black background
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Draw red square
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &square);
+        // Draw Snake
+        draw_snake(snake, renderer);
+        advance_snake(snake, SEGMENT_SIZE, 0);
 
         // Present the renderer
         SDL_RenderPresent(renderer);
 
-        SDL_Delay(16); // ~60 FPS
+        SDL_Delay(100); // ~10 FPS
     }
 
     // Cleanup
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    free_snake(snake);
     SDL_Quit();
 
     return 0;
