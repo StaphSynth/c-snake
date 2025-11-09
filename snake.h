@@ -29,6 +29,16 @@ struct Snake {
     Direction dir;
 } typedef Snake;
 
+struct Food {
+    int x;
+    int y;
+    int size;
+} typedef Food;
+
+struct Flags {
+    Boolean food_present;
+} typedef Flags;
+
 Snake *create_snake(int start_x, int start_y, int initial_length);
 void draw_snake(Snake *snake, SDL_Renderer *renderer);
 void grow_snake(Snake *snake);
@@ -37,3 +47,7 @@ void advance_snake(Snake *snake);
 void set_snake_direction(Snake *snake, Direction dir);
 Boolean check_self_collision(Snake *snake);
 Boolean check_wall_collision(Snake *snake);
+Boolean check_food_collision(Snake *snake, Food *food);
+Food *create_food(Snake *snake);
+void draw_food(Food *food, SDL_Renderer *renderer);
+void free_food(Food *food);

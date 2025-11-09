@@ -156,3 +156,53 @@ Boolean check_wall_collision(Snake *snake) {
 
     return FALSE;
 }
+
+Food *create_food(Snake *snake) {
+    Food *food = (Food *)malloc(sizeof(Food));
+    food->size = SEGMENT_SIZE;
+
+    // Place food in a random position not occupied by the snake
+    int valid_position = 0;
+    while (!valid_position) {
+        food->x = (rand() % (WINDOW_WIDTH / SEGMENT_SIZE)) * SEGMENT_SIZE;
+        food->y = (rand() % (WINDOW_HEIGHT / SEGMENT_SIZE)) * SEGMENT_SIZE;
+
+        // Check if the food position collides with the snake
+        Segment *current = snake->head;
+        valid_position = 1;
+        while (current != NULL) {
+            if (current->x == food->x && current->y == food->y) {
+                valid_position = 0;
+                break;
+            }
+            current = current->next;
+        }
+    }
+
+    return food;
+}
+
+void draw_food(Food *food, SDL_Renderer *renderer) {
+    if (food == NULL)
+        return;
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color for food
+    SDL_Rect rect = {food->x, food->y, food->size, food->size};
+    SDL_RenderFillRect(renderer, &rect);
+}
+
+void free_food(Food *food) { free(food); }
+
+Boolean check_food_collision(Snake *snake, Food *food) {
+    if (food == NULL) {
+        return FALSE;
+    }
+
+    Segment *head = snake->head;
+
+    if (head->x == food->x && head->y == food->y) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
