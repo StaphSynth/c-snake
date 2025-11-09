@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <SDL2/SDL.h>
 #include "snake.h"
+#include <SDL2/SDL.h>
+#include <stdio.h>
 
 int main() {
     // Initialize SDL
@@ -10,11 +10,9 @@ int main() {
     }
 
     // Create window
-    SDL_Window *window = SDL_CreateWindow("Snake Game",
-                                          SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED,
-                                          640, 480,
-                                          SDL_WINDOW_SHOWN);
+    SDL_Window *window =
+        SDL_CreateWindow("Snake Game", SDL_WINDOWPOS_CENTERED,
+                         SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
 
     if (window == NULL) {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -23,17 +21,18 @@ int main() {
     }
 
     // Create renderer
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer *renderer =
+        SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (renderer == NULL) {
-        printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        printf("Renderer could not be created! SDL_Error: %s\n",
+               SDL_GetError());
         SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
     }
 
     // Create a snake
-    Snake* snake = create_snake(100, 100, INITIAL_SNAKE_LENGTH);
-
+    Snake *snake = create_snake(100, 100, INITIAL_SNAKE_LENGTH);
 
     // Event loop
     SDL_Event e;
@@ -49,21 +48,21 @@ int main() {
             // handle keyboard input
             if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
-                    case SDLK_UP:
-                        set_snake_direction(snake, UP);
-                        break;
-                    case SDLK_DOWN:
-                        set_snake_direction(snake, DOWN);
-                        break;
-                    case SDLK_LEFT:
-                        set_snake_direction(snake, LEFT);
-                        break;
-                    case SDLK_RIGHT:
-                        set_snake_direction(snake, RIGHT);
-                        break;
-                    case SDLK_ESCAPE:
-                        quit = 1;
-                        break;
+                case SDLK_UP:
+                    set_snake_direction(snake, UP);
+                    break;
+                case SDLK_DOWN:
+                    set_snake_direction(snake, DOWN);
+                    break;
+                case SDLK_LEFT:
+                    set_snake_direction(snake, LEFT);
+                    break;
+                case SDLK_RIGHT:
+                    set_snake_direction(snake, RIGHT);
+                    break;
+                case SDLK_ESCAPE:
+                    quit = 1;
+                    break;
                 }
             }
         }

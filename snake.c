@@ -1,16 +1,14 @@
-#include <stdlib.h>
 #include "snake.h"
+#include <stdlib.h>
 
-Snake *create_snake(int start_x, int start_y, int initial_length)
-{
+Snake *create_snake(int start_x, int start_y, int initial_length) {
     Snake *snake = (Snake *)malloc(sizeof(Snake));
     snake->head = NULL;
     snake->tail = NULL;
     snake->length = 0;
     snake->dir = RIGHT;
 
-    for (int i = 0; i < initial_length; i++)
-    {
+    for (int i = 0; i < initial_length; i++) {
         Segment *segment = (Segment *)malloc(sizeof(Segment));
         segment->size = SEGMENT_SIZE;
         segment->x = start_x - (i * SEGMENT_SIZE);
@@ -31,13 +29,10 @@ Snake *create_snake(int start_x, int start_y, int initial_length)
     return snake;
 }
 
-void draw_snake(Snake* snake, SDL_Renderer* renderer) {
-    Segment* current = snake->head;
-    SDL_SetRenderDrawColor(renderer,
-                          SNAKE_COLOR_R,
-                          SNAKE_COLOR_G,
-                          SNAKE_COLOR_B,
-                          SNAKE_COLOR_A);
+void draw_snake(Snake *snake, SDL_Renderer *renderer) {
+    Segment *current = snake->head;
+    SDL_SetRenderDrawColor(renderer, SNAKE_COLOR_R, SNAKE_COLOR_G,
+                           SNAKE_COLOR_B, SNAKE_COLOR_A);
 
     while (current != NULL) {
         SDL_Rect rect = {current->x, current->y, current->size, current->size};
@@ -46,8 +41,8 @@ void draw_snake(Snake* snake, SDL_Renderer* renderer) {
     }
 }
 
-void grow_snake(Snake* snake) {
-    Segment* new_segment = (Segment*)malloc(sizeof(Segment));
+void grow_snake(Snake *snake) {
+    Segment *new_segment = (Segment *)malloc(sizeof(Segment));
     new_segment->size = SEGMENT_SIZE;
     new_segment->x = snake->tail->x;
     new_segment->y = snake->tail->y;
@@ -58,9 +53,9 @@ void grow_snake(Snake* snake) {
     snake->length++;
 }
 
-void free_snake(Snake* snake) {
-    Segment* current = snake->head;
-    Segment* next;
+void free_snake(Snake *snake) {
+    Segment *current = snake->head;
+    Segment *next;
 
     while (current != NULL) {
         next = current->next;
@@ -71,19 +66,27 @@ void free_snake(Snake* snake) {
     free(snake);
 }
 
-void advance_snake(Snake* snake) {
+void advance_snake(Snake *snake) {
     int dx = 0;
     int dy = 0;
 
     switch (snake->dir) {
-        case UP: dy = -SEGMENT_SIZE; break;
-        case DOWN: dy = SEGMENT_SIZE; break;
-        case LEFT: dx = -SEGMENT_SIZE; break;
-        case RIGHT: dx = SEGMENT_SIZE; break;
+    case UP:
+        dy = -SEGMENT_SIZE;
+        break;
+    case DOWN:
+        dy = SEGMENT_SIZE;
+        break;
+    case LEFT:
+        dx = -SEGMENT_SIZE;
+        break;
+    case RIGHT:
+        dx = SEGMENT_SIZE;
+        break;
     }
 
     // Create new head segment
-    Segment* new_head = (Segment*)malloc(sizeof(Segment));
+    Segment *new_head = (Segment *)malloc(sizeof(Segment));
     new_head->size = SEGMENT_SIZE;
     new_head->x = snake->head->x + dx;
     new_head->y = snake->head->y + dy;
@@ -94,7 +97,7 @@ void advance_snake(Snake* snake) {
     snake->length++;
 
     // Remove tail segment
-    Segment* current = snake->head;
+    Segment *current = snake->head;
     while (current->next != snake->tail) {
         current = current->next;
     }
@@ -105,20 +108,24 @@ void advance_snake(Snake* snake) {
     snake->length--;
 }
 
-void set_snake_direction(Snake* snake, Direction dir) {
-    switch(snake->dir) {
-        case UP:
-            if (dir == DOWN) return;
-            break;
-        case DOWN:
-            if (dir == UP) return;
-            break;
-        case LEFT:
-            if (dir == RIGHT) return;
-            break;
-        case RIGHT:
-            if (dir == LEFT) return;
-            break;
+void set_snake_direction(Snake *snake, Direction dir) {
+    switch (snake->dir) {
+    case UP:
+        if (dir == DOWN)
+            return;
+        break;
+    case DOWN:
+        if (dir == UP)
+            return;
+        break;
+    case LEFT:
+        if (dir == RIGHT)
+            return;
+        break;
+    case RIGHT:
+        if (dir == LEFT)
+            return;
+        break;
     }
 
     snake->dir = dir;

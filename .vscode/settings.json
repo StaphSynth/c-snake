@@ -10,5 +10,7 @@
     "[makefile]": {
         "editor.insertSpaces": false,
         "editor.tabSize": 4
-    }
+    },
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, IndentWidth: 4, UseTab: Never, BreakBeforeBraces: Attach }"
 }
