@@ -54,7 +54,7 @@ int main() {
                         break;
                     case SDLK_DOWN:
                         set_snake_direction(snake, DOWN);
-                         break;
+                        break;
                     case SDLK_LEFT:
                         set_snake_direction(snake, LEFT);
                         break;

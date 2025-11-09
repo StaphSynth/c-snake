@@ -9,24 +9,24 @@
 #define SNAKE_COLOR_A 255 // Alpha component of the snake color (opacity)
 
 enum Direction {
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
 } typedef Direction;
 
 struct Segment {
-  int x;
-  int y;
-  int size;
-  struct Segment *next;
+    int x;
+    int y;
+    int size;
+    struct Segment *next;
 } typedef Segment;
 
 struct Snake {
-  Segment *head;
-  Segment *tail;
-  int length;
-  Direction dir;
+    Segment *head;
+    Segment *tail;
+    int length;
+    Direction dir;
 } typedef Snake;
 
 Snake* create_snake(int start_x, int start_y, int initial_length);

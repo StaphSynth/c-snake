@@ -3,32 +3,32 @@
 
 Snake *create_snake(int start_x, int start_y, int initial_length)
 {
-  Snake *snake = (Snake *)malloc(sizeof(Snake));
-  snake->head = NULL;
-  snake->tail = NULL;
-  snake->length = 0;
-  snake->dir = RIGHT;
+    Snake *snake = (Snake *)malloc(sizeof(Snake));
+    snake->head = NULL;
+    snake->tail = NULL;
+    snake->length = 0;
+    snake->dir = RIGHT;
 
-  for (int i = 0; i < initial_length; i++)
-  {
-    Segment *segment = (Segment *)malloc(sizeof(Segment));
-    segment->size = SEGMENT_SIZE;
-    segment->x = start_x - (i * SEGMENT_SIZE);
-    segment->y = start_y;
-    segment->next = NULL;
+    for (int i = 0; i < initial_length; i++)
+    {
+        Segment *segment = (Segment *)malloc(sizeof(Segment));
+        segment->size = SEGMENT_SIZE;
+        segment->x = start_x - (i * SEGMENT_SIZE);
+        segment->y = start_y;
+        segment->next = NULL;
 
-    if (snake->head == NULL) {
-      snake->head = segment;
-      snake->tail = segment;
-    } else {
-      snake->tail->next = segment;
-      snake->tail = segment;
+        if (snake->head == NULL) {
+            snake->head = segment;
+            snake->tail = segment;
+        } else {
+            snake->tail->next = segment;
+            snake->tail = segment;
+        }
+
+        snake->length++;
     }
 
-    snake->length++;
-  }
-
-  return snake;
+    return snake;
 }
 
 void draw_snake(Snake* snake, SDL_Renderer* renderer) {
