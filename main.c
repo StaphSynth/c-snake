@@ -75,6 +75,11 @@ int main() {
         draw_snake(snake, renderer);
         advance_snake(snake);
 
+        // Check for collisions
+        if (check_self_collision(snake) || check_wall_collision(snake)) {
+            quit = 1;
+        }
+
         // Present the renderer
         SDL_RenderPresent(renderer);
 

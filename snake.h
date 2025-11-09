@@ -8,6 +8,11 @@
 #define SNAKE_COLOR_B 0   // Blue component of the snake color
 #define SNAKE_COLOR_A 255 // Alpha component of the snake color (opacity)
 
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
+
+enum { FALSE = 0, TRUE = 1 } typedef Boolean;
+
 enum Direction { UP, DOWN, LEFT, RIGHT } typedef Direction;
 
 struct Segment {
@@ -30,3 +35,5 @@ void grow_snake(Snake *snake);
 void free_snake(Snake *snake);
 void advance_snake(Snake *snake);
 void set_snake_direction(Snake *snake, Direction dir);
+Boolean check_self_collision(Snake *snake);
+Boolean check_wall_collision(Snake *snake);

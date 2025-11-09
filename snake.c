@@ -130,3 +130,29 @@ void set_snake_direction(Snake *snake, Direction dir) {
 
     snake->dir = dir;
 }
+
+Boolean check_self_collision(Snake *snake) {
+    Segment *head = snake->head;
+    Segment *current = head->next;
+
+    // walk the snake segments to see if head collides with any
+    while (current != NULL) {
+        if (head->x == current->x && head->y == current->y) {
+            return TRUE;
+        }
+        current = current->next;
+    }
+
+    return FALSE;
+}
+
+Boolean check_wall_collision(Snake *snake) {
+    Segment *head = snake->head;
+
+    if (head->x < 0 || head->x >= WINDOW_WIDTH || head->y < 0 ||
+        head->y >= WINDOW_HEIGHT) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
