@@ -2,7 +2,7 @@
 
 # Compiler and flags
 CC = gcc
-CFLAGS = $(shell sdl2-config --cflags) -Wall -Wextra -std=c99
+CFLAGS = $(shell sdl2-config --cflags) -Wall -Wextra -std=c99 -MMD -MP
 LIBS = $(shell sdl2-config --libs)
 
 # Directories
@@ -14,8 +14,14 @@ TARGET = $(BIN_DIR)/snake
 # Source files
 SOURCES = main.c snake.c
 
+# Header files (for manual reference)
+HEADERS = snake.h
+
 # Object files (automatically generated from sources, placed in bin directory)
 OBJECTS = $(SOURCES:%.c=$(BIN_DIR)/%.o)
+
+# Dependency files (automatically generated)
+DEPS = $(OBJECTS:.o=.d)
 
 # Default target
 all: $(TARGET)
@@ -28,9 +34,12 @@ $(BIN_DIR):
 $(TARGET): $(OBJECTS) | $(BIN_DIR)
 	$(CC) $(OBJECTS) $(LIBS) -o $(TARGET)
 
-# Build object files
+# Build object files - automatic header dependencies via .d files
 $(BIN_DIR)/%.o: %.c | $(BIN_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# Include dependency files (if they exist)
+-include $(DEPS)
 
 # Clean up generated files
 clean:
