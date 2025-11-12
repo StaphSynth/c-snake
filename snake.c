@@ -1,4 +1,6 @@
 #include "snake.h"
+#include "food.h"
+#include "game.h"
 #include <stdlib.h>
 
 Snake *create_snake(int start_x, int start_y, int initial_length) {
@@ -10,8 +12,8 @@ Snake *create_snake(int start_x, int start_y, int initial_length) {
 
     for (int i = 0; i < initial_length; i++) {
         Segment *segment = (Segment *)malloc(sizeof(Segment));
-        segment->size = SEGMENT_SIZE;
-        segment->x = start_x - (i * SEGMENT_SIZE);
+        segment->size = ELEMENT_SIZE;
+        segment->x = start_x - (i * ELEMENT_SIZE);
         segment->y = start_y;
         segment->next = NULL;
 
@@ -43,7 +45,7 @@ void draw_snake(Snake *snake, SDL_Renderer *renderer) {
 
 void grow_snake(Snake *snake) {
     Segment *new_segment = (Segment *)malloc(sizeof(Segment));
-    new_segment->size = SEGMENT_SIZE;
+    new_segment->size = ELEMENT_SIZE;
     new_segment->x = snake->tail->x;
     new_segment->y = snake->tail->y;
     new_segment->next = NULL;
@@ -72,22 +74,22 @@ void advance_snake(Snake *snake) {
 
     switch (snake->dir) {
     case UP:
-        dy = -SEGMENT_SIZE;
+        dy = -ELEMENT_SIZE;
         break;
     case DOWN:
-        dy = SEGMENT_SIZE;
+        dy = ELEMENT_SIZE;
         break;
     case LEFT:
-        dx = -SEGMENT_SIZE;
+        dx = -ELEMENT_SIZE;
         break;
     case RIGHT:
-        dx = SEGMENT_SIZE;
+        dx = ELEMENT_SIZE;
         break;
     }
 
     // Create new head segment
     Segment *new_head = (Segment *)malloc(sizeof(Segment));
-    new_head->size = SEGMENT_SIZE;
+    new_head->size = ELEMENT_SIZE;
     new_head->x = snake->head->x + dx;
     new_head->y = snake->head->y + dy;
     new_head->next = snake->head;
@@ -159,13 +161,13 @@ Boolean check_wall_collision(Snake *snake) {
 
 Food *create_food(Snake *snake) {
     Food *food = (Food *)malloc(sizeof(Food));
-    food->size = SEGMENT_SIZE;
+    food->size = ELEMENT_SIZE;
 
     // Place food in a random position not occupied by the snake
     int valid_position = 0;
     while (!valid_position) {
-        food->x = (rand() % (WINDOW_WIDTH / SEGMENT_SIZE)) * SEGMENT_SIZE;
-        food->y = (rand() % (WINDOW_HEIGHT / SEGMENT_SIZE)) * SEGMENT_SIZE;
+        food->x = (rand() % (WINDOW_WIDTH / ELEMENT_SIZE)) * ELEMENT_SIZE;
+        food->y = (rand() % (WINDOW_HEIGHT / ELEMENT_SIZE)) * ELEMENT_SIZE;
 
         // Check if the food position collides with the snake
         Segment *current = snake->head;

@@ -1,3 +1,5 @@
+#include "food.h"
+#include "game.h"
 #include "snake.h"
 #include <SDL2/SDL.h>
 #include <stdio.h>

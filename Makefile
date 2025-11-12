@@ -12,10 +12,10 @@ BIN_DIR = bin
 TARGET = $(BIN_DIR)/snake
 
 # Source files
-SOURCES = main.c snake.c
+SOURCES = main.c snake.c game.c food.c
 
 # Header files (for manual reference)
-HEADERS = snake.h
+HEADERS = snake.h game.h food.h
 
 # Object files (automatically generated from sources, placed in bin directory)
 OBJECTS = $(SOURCES:%.c=$(BIN_DIR)/%.o)
