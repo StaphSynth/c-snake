@@ -3,7 +3,8 @@
 #include "game.h"
 #include <stdlib.h>
 
-void initialize_snake(Snake *snake) {
+Snake *create_snake(void) {
+    Snake *snake = (Snake *)malloc(sizeof(Snake));
     snake->head = NULL;
     snake->tail = NULL;
     snake->length = 0;
@@ -25,11 +26,6 @@ void initialize_snake(Snake *snake) {
 
         snake->length++;
     }
-}
-
-Snake *create_snake(void) {
-    Snake *snake = (Snake *)malloc(sizeof(Snake));
-    initialize_snake(snake);
 
     return snake;
 }
@@ -82,7 +78,27 @@ void reset_snake(Snake *snake) {
     }
 
     // Reinitialize snake
-    initialize_snake(snake);
+    snake->head = NULL;
+    snake->tail = NULL;
+    snake->length = 0;
+    snake->dir = RIGHT;
+
+    for (int i = 0; i < INITIAL_SNAKE_LENGTH; i++) {
+        Segment *segment = (Segment *)malloc(sizeof(Segment));
+        segment->x = (WINDOW_WIDTH / 2) - (i * ELEMENT_SIZE);
+        segment->y = WINDOW_HEIGHT / 2;
+        segment->next = NULL;
+
+        if (snake->head == NULL) {
+            snake->head = segment;
+            snake->tail = segment;
+        } else {
+            snake->tail->next = segment;
+            snake->tail = segment;
+        }
+
+        snake->length++;
+    }
 }
 
 void advance_snake(Snake *snake) {
