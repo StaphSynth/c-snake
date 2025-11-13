@@ -34,10 +34,9 @@ int main() {
     }
 
     // Setup game objects
-    Flags game_flags;
-    game_flags.food_present = FALSE;
-    Snake *snake = create_snake(100, 100, INITIAL_SNAKE_LENGTH);
-    Food *food = NULL;
+    GameState *game_state = initialize_game();
+    Snake *snake = game_state->snake;
+    Food *food = game_state->food;
 
     // Event loop
     SDL_Event e;
@@ -72,27 +71,9 @@ int main() {
             }
         }
 
-        // Clear screen with black background
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-
-        if (!game_flags.food_present) {
-            food = create_food(snake);
-            game_flags.food_present = TRUE;
-        }
-
-        draw_snake(snake, renderer);
-        draw_food(food, renderer);
+        draw_game(game_state, renderer);
         advance_snake(snake);
-
-        // Check for collisions
-        if (check_self_collision(snake) || check_wall_collision(snake)) {
-            quit = 1;
-        } else if (check_food_collision(snake, food)) {
-            grow_snake(snake);
-            game_flags.food_present = FALSE;
-            free_food(food);
-        }
+        check_collisions(game_state);
 
         // Present the renderer
         SDL_RenderPresent(renderer);
@@ -103,7 +84,7 @@ int main() {
     // Cleanup
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    free_snake(snake);
+    shutdown_game(game_state);
     SDL_Quit();
 
     return 0;

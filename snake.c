@@ -3,18 +3,16 @@
 #include "game.h"
 #include <stdlib.h>
 
-Snake *create_snake(int start_x, int start_y, int initial_length) {
-    Snake *snake = (Snake *)malloc(sizeof(Snake));
+void initialize_snake(Snake *snake) {
     snake->head = NULL;
     snake->tail = NULL;
     snake->length = 0;
     snake->dir = RIGHT;
 
-    for (int i = 0; i < initial_length; i++) {
+    for (int i = 0; i < INITIAL_SNAKE_LENGTH; i++) {
         Segment *segment = (Segment *)malloc(sizeof(Segment));
-        segment->size = ELEMENT_SIZE;
-        segment->x = start_x - (i * ELEMENT_SIZE);
-        segment->y = start_y;
+        segment->x = (WINDOW_WIDTH / 2) - (i * ELEMENT_SIZE);
+        segment->y = WINDOW_HEIGHT / 2;
         segment->next = NULL;
 
         if (snake->head == NULL) {
@@ -27,6 +25,11 @@ Snake *create_snake(int start_x, int start_y, int initial_length) {
 
         snake->length++;
     }
+}
+
+Snake *create_snake(void) {
+    Snake *snake = (Snake *)malloc(sizeof(Snake));
+    initialize_snake(snake);
 
     return snake;
 }
@@ -37,7 +40,7 @@ void draw_snake(Snake *snake, SDL_Renderer *renderer) {
                            SNAKE_COLOR_B, SNAKE_COLOR_A);
 
     while (current != NULL) {
-        SDL_Rect rect = {current->x, current->y, current->size, current->size};
+        SDL_Rect rect = {current->x, current->y, ELEMENT_SIZE, ELEMENT_SIZE};
         SDL_RenderFillRect(renderer, &rect);
         current = current->next;
     }
@@ -45,7 +48,6 @@ void draw_snake(Snake *snake, SDL_Renderer *renderer) {
 
 void grow_snake(Snake *snake) {
     Segment *new_segment = (Segment *)malloc(sizeof(Segment));
-    new_segment->size = ELEMENT_SIZE;
     new_segment->x = snake->tail->x;
     new_segment->y = snake->tail->y;
     new_segment->next = NULL;
@@ -66,6 +68,21 @@ void free_snake(Snake *snake) {
     }
 
     free(snake);
+}
+
+void reset_snake(Snake *snake) {
+    // Free existing segments
+    Segment *current = snake->head;
+    Segment *next;
+
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+
+    // Reinitialize snake
+    initialize_snake(snake);
 }
 
 void advance_snake(Snake *snake) {
@@ -89,7 +106,6 @@ void advance_snake(Snake *snake) {
 
     // Create new head segment
     Segment *new_head = (Segment *)malloc(sizeof(Segment));
-    new_head->size = ELEMENT_SIZE;
     new_head->x = snake->head->x + dx;
     new_head->y = snake->head->y + dy;
     new_head->next = snake->head;
@@ -158,42 +174,6 @@ Boolean check_wall_collision(Snake *snake) {
 
     return FALSE;
 }
-
-Food *create_food(Snake *snake) {
-    Food *food = (Food *)malloc(sizeof(Food));
-    food->size = ELEMENT_SIZE;
-
-    // Place food in a random position not occupied by the snake
-    int valid_position = 0;
-    while (!valid_position) {
-        food->x = (rand() % (WINDOW_WIDTH / ELEMENT_SIZE)) * ELEMENT_SIZE;
-        food->y = (rand() % (WINDOW_HEIGHT / ELEMENT_SIZE)) * ELEMENT_SIZE;
-
-        // Check if the food position collides with the snake
-        Segment *current = snake->head;
-        valid_position = 1;
-        while (current != NULL) {
-            if (current->x == food->x && current->y == food->y) {
-                valid_position = 0;
-                break;
-            }
-            current = current->next;
-        }
-    }
-
-    return food;
-}
-
-void draw_food(Food *food, SDL_Renderer *renderer) {
-    if (food == NULL)
-        return;
-
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color for food
-    SDL_Rect rect = {food->x, food->y, food->size, food->size};
-    SDL_RenderFillRect(renderer, &rect);
-}
-
-void free_food(Food *food) { free(food); }
 
 Boolean check_food_collision(Snake *snake, Food *food) {
     if (food == NULL) {

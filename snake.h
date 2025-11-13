@@ -11,7 +11,6 @@
 struct Segment {
     int x;
     int y;
-    int size;
     struct Segment *next;
 };
 
@@ -22,12 +21,13 @@ struct Snake {
     Direction dir;
 };
 
-Snake *create_snake(int start_x, int start_y, int initial_length);
+Snake *create_snake(void);
 void draw_snake(Snake *snake, SDL_Renderer *renderer);
 void grow_snake(Snake *snake);
 void free_snake(Snake *snake);
 void advance_snake(Snake *snake);
 void set_snake_direction(Snake *snake, Direction dir);
+void reset_snake(Snake *snake);
 Boolean check_self_collision(Snake *snake);
 Boolean check_wall_collision(Snake *snake);
 Boolean check_food_collision(Snake *snake, Food *food);
